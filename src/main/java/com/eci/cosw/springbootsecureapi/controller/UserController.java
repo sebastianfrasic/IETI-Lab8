@@ -30,13 +30,13 @@ public class UserController {
 
         String jwtToken = "";
 
-        if (login.getUsername() == null || login.getPassword() == null) {
-            throw new ServletException("Please fill in username and password");
-        }
-
         String username = login.getUsername();
         String password = login.getPassword();
         String email = login.getEmail();
+
+        if (username == null || password == null) {
+            throw new ServletException("Please fill in username and password");
+        }
 
         if(userService.findUserByEmailAndPassword(email, password) == null){
             throw new ServletException("Invalid login. Please check your name and password.");
@@ -52,11 +52,9 @@ public class UserController {
 
         String accessToken;
 
-
         public Token(String accessToken) {
             this.accessToken = accessToken;
         }
-
 
         public String getAccessToken() {
             return accessToken;
