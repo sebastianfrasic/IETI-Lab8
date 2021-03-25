@@ -54,6 +54,7 @@ public class UserController {
     @PostMapping("/{id}/tasks")
     public ResponseEntity<?> addTask(@PathVariable String id, @RequestBody Task task) {
         try {
+            System.out.println(task);
             userService.addTask(id, task);
             return new ResponseEntity<>("Task added succesfully", HttpStatus.CREATED);
         } catch (Exception e) {

@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class TaskServiceImpl implements TaskService {
 
-    private List<Task> tasks = new ArrayList<>();
+    private static List<Task> listOfTasks = new ArrayList<>();
 
     public TaskServiceImpl() {
     }
@@ -20,16 +20,23 @@ public class TaskServiceImpl implements TaskService {
 
     @PostConstruct
     private void populateSampleData() {
-        tasks.add(new Task("Do IETI Lab 8", "Juan Frasica", "In Progress", "24/05/2021"));
-        tasks.add(new Task("Do IETI Lab 9", "Daniel López", "Ready", "17/03/2021"));
-        tasks.add(new Task("Do project stuff", "María Paez", "Completed", "13/02/2021"));
+        listOfTasks.add(new Task("Do IETI Lab 8", "Juan Frasica", "In Progress", "24/05/2021"));
+        listOfTasks.add(new Task("Do IETI Lab 9", "Daniel López", "Ready", "17/03/2021"));
+        listOfTasks.add(new Task("Do project stuff", "María Paez", "Completed", "13/02/2021"));
     }
 
 
     @Override
     public List<Task> getTasks() {
-        return tasks;
+        return listOfTasks;
     }
 
 
+    public static List<Task> getListOfTasks() {
+        return listOfTasks;
+    }
+
+    public static void setListOfTasks(List<Task> listOfTasks) {
+        TaskServiceImpl.listOfTasks = listOfTasks;
+    }
 }

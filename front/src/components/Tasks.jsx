@@ -1,31 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Task } from './Task';
 import { MyDrawer } from "./MyDrawer";
 import { NewTask } from './NewTask';
-import Swal from 'sweetalert2';
-import axios from "axios";
 
 export const Tasks = (props) => {
-
-    const [tasks, setTasks] = useState([]);
-
-    useEffect(() => {
-        axios.get("http://localhost:8080/api/tasks")
-            .then(response => {
-                var APIResponse = response.data;
-                let finalTasks = [...tasks]
-                if (APIResponse.length !== tasks.length) {
-                    finalTasks = APIResponse
-                }
-                setTasks(finalTasks)
-            }).catch(error => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: error.message,
-            })
-        });
-    }, [tasks]);
 
     const [filtersState, setFiltersState] = useState({
         dueDate: null,
@@ -37,8 +15,7 @@ export const Tasks = (props) => {
         setFiltersState(filters);
     };
 
-    let taskList = tasks;
-
+    let taskList = props.items;
 
     if (filtersState.dueDate !== null) {
         taskList = taskList.filter(item => item.dueDate === filtersState.dueDate);

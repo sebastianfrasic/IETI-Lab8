@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.css';
 import { Login } from './components/Login';
 import { Tasks } from './components/Tasks';
 import { UserProfile } from './components/UserProfile';
 import Swal from 'sweetalert2';
+import axios from "axios";
 
 const App = () => {
 
@@ -22,7 +23,27 @@ const App = () => {
     }
 
 
+    const [itemsState, setItemsState] = useState([]);
 
+    useEffect(() => {
+        axios.get("http://localhost:8080/api/tasks")
+            .then(response => {
+                var APIResponse = response.data;
+                let finalTasks = [...itemsState]
+                if (APIResponse.length !== itemsState.length) {
+                    finalTasks = APIResponse
+                }
+                setItemsState(finalTasks)
+            }).catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.message,
+            })
+        });
+    }, []);
+
+    /*
     const items = [{
         "description": "Do IETI Lab 3",
         "responsible": {
@@ -49,7 +70,7 @@ const App = () => {
         "dueDate": 158464685646
     }
     ];
-
+*/
     setLocalStorage();
 
     let initialLoggedInState = localStorage.getItem("isLoggedIn");
@@ -59,9 +80,9 @@ const App = () => {
         initialLoggedInState = true;
     }
 
-    const [isLoggedInState, setIsLoggedInState] = useState(initialLoggedInState);
-    const [itemsState, setItemsState] = useState(items);
 
+
+    const [isLoggedInState, setIsLoggedInState] = useState(initialLoggedInState);
 
     const handleSuccessfullyLogin = (e) => {
         setIsLoggedInState(true);
@@ -87,6 +108,7 @@ const App = () => {
 
     const handleAddNewTask = (newItem) => {
         const newItems = [...itemsState, newItem];
+        console.log(newItems)
         setItemsState(newItems);
     }
 

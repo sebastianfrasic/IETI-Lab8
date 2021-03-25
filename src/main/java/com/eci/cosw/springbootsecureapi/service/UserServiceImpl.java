@@ -89,6 +89,8 @@ public class UserServiceImpl
                 break;
             }
         }
+        System.out.println(task);
+        TaskServiceImpl.getListOfTasks().add(task);
         if (!userExisting) {
             throw new Exception("That user doesn´t exists");
         }

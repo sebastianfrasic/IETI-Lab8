@@ -17,7 +17,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
 import DatePicker from '@material-ui/lab/DatePicker';
-
+import Swal from 'sweetalert2';
+import axios from "axios";
 
 
 
@@ -68,14 +69,30 @@ export const NewTask = (props) => {
             alert("Some fields are incomplete.");
         } else {
             const newTask = {
+                "id": 0,
                 "description": descriptionState,
-                "responsible": {
-                    "name": responsibleState,
-                    "email": props.email
-                },
+                "responsible": responsibleState,
                 "status": statusState,
-                "dueDate": dueDateState
+                "dueDate": new Date(dueDateState).toLocaleDateString()
             };
+            axios.post("http://localhost:8080/api/users/1/tasks", newTask)
+            .then(response => {
+                return response.data;
+            })
+            .then(Response => {
+                Swal.fire(
+                    '¡Nice!',
+                    'Task added',
+                    'success'
+                )
+            }).catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Error adding task at making the POST.'
+                })
+            });
+            console.log(newTask)
             props.addTask(newTask);
             setOpenState(false);
         }
