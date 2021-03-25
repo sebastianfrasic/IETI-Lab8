@@ -16,12 +16,10 @@ export const Task = (props) => {
                     {props.status}
                 </Typography>
                 <Typography className="pos" color="textSecondary">
-                    {new Date(props.dueDate).toLocaleString()}
+                    {props.dueDate}
                 </Typography>
                 <Typography variant="body2" component="p">
-                    {props.responsible.name}
-                    <br />
-                    {props.responsible.email}
+                    {props.responsible}
                 </Typography>
             </CardContent>
             <br/>

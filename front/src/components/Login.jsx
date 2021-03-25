@@ -37,6 +37,8 @@ export const Login = (props) => {
         e.preventDefault();
         axios.post("http://localhost:8080/api/users/login", user)
             .then(Response => {
+                let token = Response.data.accessToken;
+                localStorage.setItem("token", token);
                 props.successfully();
             }).catch(error => {
                 props.failed();
