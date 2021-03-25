@@ -1,12 +1,14 @@
 package com.eci.cosw.springbootsecureapi.model;
 
+import java.util.ArrayList;
+
 /**
  * @author Santiago Carrillo
  * 8/21/17.
  */
 public class User {
 
-    private long id;
+    private String id;
 
     private String email;
 
@@ -17,24 +19,33 @@ public class User {
     private String lastname;
 
     private String username;
+    private ArrayList<Task> tasks;
+
 
 
     public User() {
     }
 
-    public User(String email, String password, String firstname, String lastname) {
+
+    public User(String id, String username, String email, String password) {
+        this.id = id;
+        this.username = username;
         this.email = email;
         this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
+        tasks = new ArrayList<>();
     }
 
 
-    public long getId() {
+
+    public void addTask(Task task) {
+        this.tasks.add(task);
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -1,5 +1,6 @@
 package com.eci.cosw.springbootsecureapi.service;
 
+import com.eci.cosw.springbootsecureapi.model.Task;
 import com.eci.cosw.springbootsecureapi.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,32 +18,50 @@ import java.util.List;
 public class UserServiceImpl
         implements UserService {
 
-    private List<User> users = new ArrayList<>();
+    public List<User> users = new ArrayList<>();
 
 
     @Autowired
     public UserServiceImpl() {
+
     }
 
     @PostConstruct
     private void populateSampleData() {
-        users.add(new User("test@mail.com", "password", "Andres", "Perez"));
+        users.add(new User("1", "Juan Frasica", "juan@mail.com", "s3b4stian"));
+        users.add(new User("2", "Daniel López", "daniel@mail.com", "daniel123"));
+        users.add(new User("3", "María Paez", "maria@mail.com", "m4ria12345"));
     }
 
 
     @Override
-    public List<User> getUsers() {
-        return users;
+    public List<User> getUsers() throws Exception {
+        if (users.isEmpty()) {
+            throw new Exception("There are no users");
+        } else {
+            return users;
+        }
     }
 
     @Override
-    public User getUser(Long id) {
-        return users.get(0);
+    public User getUser(String id) throws Exception {
+        for (User user : users) {
+            if (user.getId().equals(id)) {
+                return user;
+            }
+        }
+        throw new Exception("That user doesn´t exists");
     }
 
     @Override
-    public User createUser(User user) {
-        return users.get(0);
+    public User createUser(User user) throws Exception {
+        for (User u : users) {
+            if (u.getId().equals(user.getId())) {
+                throw new Exception("User already registered");
+            }
+        }
+        users.add(user);
+        return user;
     }
 
     @Override
@@ -58,6 +77,22 @@ public class UserServiceImpl
             throw new ServletException("User email not found.");
         }
         return user.getPassword().equals(password) ? user : null;
+    }
+
+    @Override
+    public void addTask(String userId, Task task) throws Exception {
+        boolean userExisting = false;
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId().equals(userId)) {
+                users.get(i).addTask(task);
+                userExisting = true;
+                break;
+            }
+        }
+        if (!userExisting) {
+            throw new Exception("That user doesn´t exists");
+        }
+
     }
 
 }
